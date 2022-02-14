@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>ぷちぷちゲーム</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="description" content="ぷちぷちゲーム">
+        <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    </head>
+    <body> 
+        <div class="title">
+            <h1>ぷちぷちゲーム</h1>
+            <button onclick="gamestart()">ゲームスタート</button>
+            <button onclick="menuconfig()">設定</button>
+        </div>
+        <div class="configuration">
+                <p>時間：
+                        <input type="range" id="time" min="1" max="320" step="0.1" value="1">
+                        <span id="time_range">1秒</span>
+                </p>
+                <button onclick="maintitle()">戻る</button>
+        </div>
+        <div class="item">
+                <h2 id="timeset"></h2>
+        </div>
+        <div class="item">
+                <h3 class="fishtext">スコア</h3>
+        </div>
+        <div class="item">
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+        </div>
+        <div class="item">
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+        </div>
+        <div class="item">
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+        </div>
+        <div class="item">
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+        </div>
+        <div class="item">
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+                <p data-id="0"></p>
+        </div>
+        <div class="finsh">
+            <h3>あなたの最高スコア</h3>
+            <p class="fishtext"></p>
+            <button onclick="come(), gamestart()">もう一度遊ぶ</button>
+            <button onclick="come(), maintitle()">メインメニューに戻る</button>
+        </div>
+    </body>
+    <style>
+    .title {
+        text-align: center;
+        margin: 5%;
+    }
+    button {
+        background-color: lightslategrey;
+        border: 2px rgba(22, 22, 22, 1) solid;    
+        margin-top: 2%;    
+    }
+    .configuration {
+        text-align: center;
+        display: none;
+    }
+    .item {
+        display: none;
+        justify-content: center;
+    }
+    .item p {
+        background-color: black;
+        width: 50px;
+        height: 50px;
+        margin: 5px;
+        padding: 5px;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+    .item p:active{
+    box-shadow: none;
+    position: relative;
+    top: 5px;
+    }
+    .finsh {
+        text-align: center;
+        display: none;
+    }
+    .finsh p{
+        font-size: 30px;
+        color: aqua;
+    }
+    </style>
+    <script type="text/javascript">
+    let game = false;
+    let aaa = "";
+    let count = "";
+    let countup = 0;
+    let time = document.getElementById("time");
+    let time_range = document.getElementById("time_range");
+    function menuconfig() {
+        $(".title").css('display', 'none');
+        $(".configuration").css('display', 'block');
+    }
+    function maintitle() {
+        $(".title").css('display', 'block');
+        $(".configuration").css('display', 'none');
+    }
+    function gamestart() {
+        $(".title").css('display', 'none');
+        $(".item").css('display', 'flex');
+        game = true;
+        timesettim();
+    }
+    time.addEventListener("change", function(){
+        time_range.textContent = Math.floor(time.value) + "秒";
+     }, false);
+     
+        setInterval(function(){
+            if(game === true) {
+            timer();
+            };
+        },1000);
+    function timesettim() {
+        aaa = Math.floor(time.value);
+        $("#timeset").html("残り時間：" + aaa + "秒");
+    }
+    function timer() {
+        if(aaa > 0) {
+        aaa--;
+        } 
+        else {
+           game = false;
+           finsho();
+        }
+     $("#timeset").html("残り時間：" + aaa + "秒");
+    };
+    function finsho() {
+        $(".item").css('display', 'none');
+        $(".finsh").css('display', 'block');
+        $("#fishtext").html(aaa);
+    }
+    function come() {
+        $(".finsh").css('display', 'none');
+        countup = 0;
+        $(".fishtext").html("スコア：" + countup);
+        count = 0;
+        $(".item p").css('background-color', 'black').data('id', count);
+    }
+    $(".item p").on("click", function(){
+        count = $(this,".item p").data('id');
+        if(count === 0) {
+            countup++;
+            $(this,".item p").css('background-color', 'blue');
+            count++;
+        }
+        else if(count === 1) {
+            countup = countup + 2;
+            $(this,".item p").css('background-color', 'red');
+            count++;
+        }
+        else if(count === 2) {
+            countup = countup + 3;
+            $(this,".item p").css('background-color', 'green');
+            count = 0;
+        }
+        $(this).data('id', count);
+        $(".fishtext").html("スコア：" + countup);
+    });
+    </script>
+</html>
