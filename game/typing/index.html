@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>タイピングゲーム</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="description" content="タイピングゲーム">
+        <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    </head>
+    <body> 
+        <div class="title">
+            <h1>タイピングゲーム</h1>
+            <button onclick="gamestart()">ゲームスタート</button>
+            <button onclick="menuconfig()">設定</button>
+        </div>
+        <div class="configuration">
+                <p>時間：
+                        <input type="range" id="time" min="1" max="320" step="1" value="50">
+                        <span id="time_range">50秒</span>
+                </p>
+                <p id="bgmarea">BGM
+                <select name="BGM" id="selectbox">
+                    <option value="ON">ON</option>
+                    <option value="OFF">OFF</option>
+                </select>
+                </p>
+                <button onclick="maintitle()">戻る</button>
+        </div>
+        <div class="item">
+                <h2 id="timeset"></h2>
+        </div>
+        <div class="item">
+                <h3 class="fishtext">スコア</h3>
+        </div>
+        <div class="item">
+                <p>abcdefghijklmnopqrstuvwxyz</p>
+                <p id="gettext"></p>
+        </div>
+        <div class="finsh">
+            <h3>あなたのスコア</h3>
+            <p class="fishtext"></p>
+            <button onclick="come(), gamestart()">もう一度遊ぶ</button>
+            <button onclick="come(), maintitle()">メインメニューに戻る</button>
+        </div>
+          <audio id="bgmsound" preload="auto" autoplay loop> 
+            <source src="typingBGM.mp3" type="audio/mp3">
+                <source src="sound.aac">
+                    <p>ご利用のブラウザではこの音声を再生できません。</p>
+          </audio>
+    </body>
+    <style>
+    .title {
+        text-align: center;
+        margin: 5%;
+    }
+    button {
+        background-color: lightslategrey;
+        border: 2px rgba(22, 22, 22, 1) solid;    
+        margin-top: 2%;    
+    }
+    .configuration {
+        text-align: center;
+        display: none;
+    }
+    .item {
+        display: none;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .item p{
+        font-size: 50px;
+    }
+    @media (max-width: 700px) {
+        .item p{
+        font-size: 30px;
+        }
+    }
+    .finsh {
+        text-align: center;
+        display: none;
+    }
+    .finsh p{
+        font-size: 30px;
+        color: aqua;
+    }
+    #selectbox {
+        background-color: #808080;
+    }
+    #selectbox option{
+        background-color: #fff;
+    }
+    </style>
+    <script type="text/javascript">
+    let game = false;
+    let aaa = "";
+    let countup = 0;
+    let time = document.getElementById("time");
+    let time_range = document.getElementById("time_range");
+    let bgm = $('#bgmsound');
+    let val = $('#selectbox').val();
+    let textset = "";
+      
+       
+    $('#selectbox').change(function() {
+      val = $('#selectbox').val();
+    });
+    function menuconfig() {
+        $(".title").css('display', 'none');
+        $(".configuration").css('display', 'block');
+    }
+    function maintitle() {
+        $(".title").css('display', 'block');
+        $(".configuration").css('display', 'none');
+    }
+    function gamestart() {
+        $(".title").css('display', 'none');
+        $(".item").css('display', 'block');
+        game = true;
+        timesettim();
+        bgmstring();
+    }
+    function bgmstring() {
+        if(val === "ON" && game === true) {
+            bgm[0].currentTime = 0;
+            bgm[0].play();
+        }
+        else if(game === false || val === "OFF") {
+            bgm[0].pause();
+        }
+    }
+    time.addEventListener("change", function(){
+        time_range.textContent = Math.floor(time.value) + "秒";
+     }, false);
+     
+        setInterval(function(){
+            if(game === true) {
+            timer();
+            };
+        },1000);
+    function timesettim() {
+        aaa = Math.floor(time.value);
+        $("#timeset").html("残り時間：" + aaa + "秒");
+    }
+    function timer() {
+        if(aaa > 0) {
+        aaa--;
+        } 
+        else {
+           game = false;
+           textset = "";
+           finsho();
+           bgmstring();
+        }
+     $("#timeset").html("残り時間：" + aaa + "秒");
+    };
+    function finsho() {
+        $(".item").css('display', 'none');
+        $(".finsh").css('display', 'block');
+        $("#fishtext").html(aaa);
+        $("#gettext").text("");
+    }
+    function come() {
+        $(".finsh").css('display', 'none');
+        countup = 0;
+        $(".fishtext").html("スコア：" + countup);
+    }
+    $(window).keydown(function(event) {
+        const a = event.key;
+        if(a === "a"
+        || a === "b"
+        || a === "c"
+        || a === "d"
+        || a === "e"
+        || a === "f"
+        || a === "g"
+        || a === "h"
+        || a === "i"
+        || a === "j"
+        || a === "k"
+        || a === "l"
+        || a === "m"
+        || a === "n"
+        || a === "o"
+        || a === "p"
+        || a === "q"
+        || a === "r"
+        || a === "s"
+        || a === "t"
+        || a === "u"
+        || a === "v"
+        || a === "w"
+        || a === "x"
+        || a === "y"
+        || a === "z"
+       )
+       {
+        textset = textset + a;
+        $("#gettext").text(textset);
+       }
+       else if(a === "Enter")
+       {
+        countupside();
+       }
+       else if(a === "Backspace")
+       {
+         textset = textset.slice( 0, -1 ) ;
+         $("#gettext").text(textset);
+       }
+       else if(a === "Delete")
+       {
+         textset = "";
+         $("#gettext").text("");
+       }
+       {
+        return false;
+       }
+    });
+    function countupside() {
+        if(textset === "abcdefghijklmnopqrstuvwxyz") {
+        countup++;
+        textset = "";
+         $("#gettext").text(textset);
+         $(".fishtext").html("スコア：" + countup);
+        }
+    }
+    </script>
+</html>
