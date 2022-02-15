@@ -32,8 +32,8 @@ $(function() {
   });
 });
 let ie = 0;
-let countimg = ["images/countentmenu/ピザクリッカーイメージ.png", "images/countentmenu/トランプイメージ.png", "images/countentmenu/putiputi.png"];
-let fontchange = ["クリックゲーム", "トランプゲーム", "ぷちぷちゲーム"];
+let countimg = ["images/countentmenu/ピザクリッカーイメージ.png", "images/countentmenu/トランプイメージ.png", "images/countentmenu/putiputi.png", "images/countentmenu/typing.png"];
+let fontchange = ["クリックゲーム", "トランプゲーム", "ぷちぷちゲーム", "タイピングゲーム"];
 let gameurl = ["game.html"]
 $('.borderLeft').click(function() {
     if(ie <= 0) {
@@ -71,4 +71,14 @@ $('.borderRight').hover(function(){
     function(){
     $(this).css("border-top", "3px solid rgb(34, 34, 30)");
     $(this).css("border-left", "3px solid rgb(34, 34, 30)");
+    });
+
+     /*アニメロード*/
+     $(function() {
+      setTimeout(function(){
+        $('.start p').fadeIn(1600);
+      },500); //0.5秒後にロゴをフェードイン!
+      setTimeout(function(){
+        $('.start').fadeOut(500);
+      },2500); //2.5秒後にロゴ含め真っ白背景をフェードアウト！
     });

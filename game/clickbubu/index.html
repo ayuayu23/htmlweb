@@ -18,8 +18,14 @@
         </div>
         <div class="configuration">
                 <p>時間：
-                        <input type="range" id="time" min="1" max="320" step="0.1" value="1">
-                        <span id="time_range">1秒</span>
+                        <input type="range" id="time" min="1" max="320" step="1" value="50">
+                        <span id="time_range">50秒</span>
+                </p>
+                <p id="bgmarea">BGM
+                <select name="BGM" id="selectbox">
+                    <option value="ON">ON</option>
+                    <option value="OFF">OFF</option>
+                </select>
                 </p>
                 <button onclick="maintitle()">戻る</button>
         </div>
@@ -70,6 +76,14 @@
             <button onclick="come(), gamestart()">もう一度遊ぶ</button>
             <button onclick="come(), maintitle()">メインメニューに戻る</button>
         </div>
+        <audio id="btnsound" preload="auto">
+            <source src="putiputi.mp3" type="audio/mp3">
+        </audio>
+          <audio id="bgmsound" preload="auto" autoplay loop> 
+            <source src="BGM.mp3" type="audio/mp3">
+                <source src="sound.aac">
+                    <p>ご利用のブラウザではこの音声を再生できません。</p>
+          </audio>
     </body>
     <style>
     .title {
@@ -111,6 +125,12 @@
         font-size: 30px;
         color: aqua;
     }
+    #selectbox {
+        background-color: #808080;
+    }
+    #selectbox option{
+        background-color: #fff;
+    }
     </style>
     <script type="text/javascript">
     let game = false;
@@ -119,6 +139,14 @@
     let countup = 0;
     let time = document.getElementById("time");
     let time_range = document.getElementById("time_range");
+    let se = $('#btnsound');
+    let bgm = $('#bgmsound');
+    let val = $('#selectbox').val();
+      
+       
+    $('#selectbox').change(function() {
+      val = $('#selectbox').val();
+    });
     function menuconfig() {
         $(".title").css('display', 'none');
         $(".configuration").css('display', 'block');
@@ -132,6 +160,16 @@
         $(".item").css('display', 'flex');
         game = true;
         timesettim();
+        bgmstring();
+    }
+    function bgmstring() {
+        if(val === "ON") {
+            bgm[0].currentTime = 0;
+            bgm[0].play();
+        }
+        if(game === false || val === "OFF") {
+            bgm[0].pause();
+        }
     }
     time.addEventListener("change", function(){
         time_range.textContent = Math.floor(time.value) + "秒";
@@ -153,6 +191,7 @@
         else {
            game = false;
            finsho();
+           bgmstring();
         }
      $("#timeset").html("残り時間：" + aaa + "秒");
     };
@@ -187,6 +226,10 @@
         }
         $(this).data('id', count);
         $(".fishtext").html("スコア：" + countup);
+
+        se[0].currentTime = 0;
+        se[0].play();
     });
+    
     </script>
 </html>
